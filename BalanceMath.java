@@ -8,13 +8,12 @@ import java.math.BigInteger;
 public class BalanceMath extends JFrame {
     private final JTextField a = new JTextField("12");
     private final JTextField b = new JTextField("8");
-    private final JTextField c = new JTextField("5");
     private final JTextArea result = new JTextArea();
 
     public BalanceMath() {
         super("BalanceMath");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 520);
+        setSize(700, 440);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new BorderLayout(12, 12));
@@ -25,21 +24,17 @@ public class BalanceMath extends JFrame {
         title.setFont(new Font("SansSerif", Font.BOLD, 26));
         panel.add(title, BorderLayout.NORTH);
 
-        JPanel top = new JPanel(new GridLayout(2, 3, 10, 8));
+        JPanel top = new JPanel(new GridLayout(2, 2, 10, 8));
         top.add(new JLabel("A"));
         top.add(new JLabel("B"));
-        top.add(new JLabel("C"));
         top.add(a);
         top.add(b);
-        top.add(c);
 
         JButton calculate = new JButton("Calculate");
-        JButton properties = new JButton("Test properties");
         JButton clear = new JButton("Clear");
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         buttons.add(calculate);
-        buttons.add(properties);
         buttons.add(clear);
 
         JPanel controls = new JPanel(new BorderLayout(8, 8));
@@ -51,12 +46,11 @@ public class BalanceMath extends JFrame {
         result.setFont(new Font("Monospaced", Font.PLAIN, 14));
         result.setLineWrap(true);
         result.setWrapStyleWord(true);
-        result.setText("Enter some numbers and press Calculate.\n\n" +
+        result.setText("Enter two numbers and press Calculate.\n\n" +
                 "Rule: A ◇ B = A + B + |A - B| / gcd(A, B)");
         panel.add(new JScrollPane(result), BorderLayout.SOUTH);
 
         calculate.addActionListener(e -> calculate());
-        properties.addActionListener(e -> testProperties());
         clear.addActionListener(e -> result.setText(""));
     }
 
@@ -82,28 +76,6 @@ public class BalanceMath extends JFrame {
                     y + " ◇ " + x + " = " + yx + "\n\n" +
                     "Same result both ways: " + xy.equals(yx) + "\n\n" +
                     "Rule:\nA ◇ B = A + B + |A - B| / gcd(A, B)"
-            );
-        } catch (NumberFormatException ex) {
-            showError();
-        }
-    }
-
-    private void testProperties() {
-        try {
-            BigInteger x = read(a);
-            BigInteger y = read(b);
-            BigInteger z = read(c);
-
-            BigInteger xy = balance(x, y);
-            BigInteger left = balance(xy, z);
-            BigInteger right = balance(x, balance(y, z));
-
-            result.setText(
-                    "A = " + x + ", B = " + y + ", C = " + z + "\n\n" +
-                    "A ◇ B = " + xy + "\n\n" +
-                    "(A ◇ B) ◇ C = " + left + "\n" +
-                    "A ◇ (B ◇ C) = " + right + "\n\n" +
-                    "Associative for these numbers: " + left.equals(right)
             );
         } catch (NumberFormatException ex) {
             showError();
