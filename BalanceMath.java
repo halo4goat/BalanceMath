@@ -8,50 +8,42 @@ import java.math.BigInteger;
 public class BalanceMath extends JFrame {
     private final JTextField a = new JTextField("12");
     private final JTextField b = new JTextField("8");
-    private final JTextArea result = new JTextArea();
+    private final JLabel answer = new JLabel("—", SwingConstants.CENTER);
 
     public BalanceMath() {
         super("BalanceMath");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 440);
+        setSize(500, 320);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new BorderLayout(12, 12));
-        panel.setBorder(new EmptyBorder(18, 18, 18, 18));
+        JPanel panel = new JPanel(new BorderLayout(15, 15));
+        panel.setBorder(new EmptyBorder(25, 25, 25, 25));
         setContentPane(panel);
 
-        JLabel title = new JLabel("BalanceMath");
-        title.setFont(new Font("SansSerif", Font.BOLD, 26));
+        JLabel title = new JLabel("BalanceMath", SwingConstants.CENTER);
+        title.setFont(new Font("SansSerif", Font.BOLD, 28));
         panel.add(title, BorderLayout.NORTH);
 
-        JPanel top = new JPanel(new GridLayout(2, 2, 10, 8));
-        top.add(new JLabel("A"));
-        top.add(new JLabel("B"));
-        top.add(a);
-        top.add(b);
+        JPanel inputs = new JPanel(new GridLayout(2, 2, 12, 10));
+        inputs.add(new JLabel("A"));
+        inputs.add(new JLabel("B"));
+        inputs.add(a);
+        inputs.add(b);
+        panel.add(inputs, BorderLayout.CENTER);
+
+        JPanel bottom = new JPanel(new BorderLayout(10, 10));
 
         JButton calculate = new JButton("Calculate");
-        JButton clear = new JButton("Clear");
+        bottom.add(calculate, BorderLayout.NORTH);
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-        buttons.add(calculate);
-        buttons.add(clear);
+        answer.setFont(new Font("SansSerif", Font.BOLD, 34));
+        bottom.add(answer, BorderLayout.CENTER);
 
-        JPanel controls = new JPanel(new BorderLayout(8, 8));
-        controls.add(top, BorderLayout.CENTER);
-        controls.add(buttons, BorderLayout.SOUTH);
-        panel.add(controls, BorderLayout.CENTER);
-
-        result.setEditable(false);
-        result.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        result.setLineWrap(true);
-        result.setWrapStyleWord(true);
-        result.setText("Enter two numbers and press Calculate.\n\n" +
-                "Rule: A ◇ B = A + B + |A - B| / gcd(A, B)");
-        panel.add(new JScrollPane(result), BorderLayout.SOUTH);
+        panel.add(bottom, BorderLayout.SOUTH);
 
         calculate.addActionListener(e -> calculate());
-        clear.addActionListener(e -> result.setText(""));
+        a.addActionListener(e -> calculate());
+        b.addActionListener(e -> calculate());
     }
 
     private BigInteger balance(BigInteger x, BigInteger y) {
@@ -68,27 +60,16 @@ public class BalanceMath extends JFrame {
         try {
             BigInteger x = read(a);
             BigInteger y = read(b);
-            BigInteger xy = balance(x, y);
-            BigInteger yx = balance(y, x);
-
-            result.setText(
-                    x + " ◇ " + y + " = " + xy + "\n" +
-                    y + " ◇ " + x + " = " + yx + "\n\n" +
-                    "Same result both ways: " + xy.equals(yx) + "\n\n" +
-                    "Rule:\nA ◇ B = A + B + |A - B| / gcd(A, B)"
-            );
+            answer.setText(balance(x, y).toString());
         } catch (NumberFormatException ex) {
-            showError();
+            answer.setText("?");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter whole numbers.",
+                    "Input error",
+                    JOptionPane.WARNING_MESSAGE
+            );
         }
-    }
-
-    private void showError() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Please enter whole numbers.",
-                "Input error",
-                JOptionPane.WARNING_MESSAGE
-        );
     }
 
     public static void main(String[] args) {
