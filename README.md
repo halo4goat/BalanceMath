@@ -1,17 +1,96 @@
 # BalanceMath
 
-BalanceMath is a small math experiment made to play around with a different kind of operation.
+BalanceMath is a small math experiment built around a custom operation.
 
-The rule is:
+## The rule
+
+The operation is:
 
 **A ◇ B = A + B + |A - B| / gcd(A, B)**
 
-Put numbers into the program and see what the rule gives you. It can also test a couple of basic properties, like whether switching the numbers changes the answer and whether grouping three numbers changes the result.
+Here, **gcd** means the greatest common divisor — the largest whole number that divides both A and B.
 
-## Running it
+### Example
 
-The project is written in Java and uses a simple desktop window.
+Take:
 
-A Windows installer is built automatically with GitHub Actions. Open the latest workflow run and download the **BalanceMath-Windows** artifact.
+**A = 12**  
+**B = 8**
 
-This is an experiment, not a claim that the idea is mathematically unique or historically undiscovered.
+First:
+
+- 12 + 8 = 20
+- |12 - 8| = 4
+- gcd(12, 8) = 4
+- 4 / 4 = 1
+
+So:
+
+**12 ◇ 8 = 20 + 1 = 21**
+
+Another example:
+
+**9 ◇ 6 = 9 + 6 + |9 - 6| / gcd(9, 6)**
+
+- 9 + 6 = 15
+- |9 - 6| = 3
+- gcd(9, 6) = 3
+- 3 / 3 = 1
+
+Therefore:
+
+**9 ◇ 6 = 16**
+
+## How the program works
+
+Enter whole numbers for **A** and **B**, then press **Calculate**.
+
+The program:
+
+1. Reads the two numbers.
+2. Finds their greatest common divisor.
+3. Finds the absolute difference between them.
+4. Divides the difference by the gcd.
+5. Adds that result to A + B.
+6. Shows the final answer.
+
+There is also a **Test properties** button. Enter A, B, and C to compare:
+
+**(A ◇ B) ◇ C**
+
+with:
+
+**A ◇ (B ◇ C)**
+
+This lets you experiment with whether the operation is associative for the numbers you choose.
+
+The calculator also checks:
+
+**A ◇ B**
+
+against:
+
+**B ◇ A**
+
+so you can see that the operation gives the same result when the two inputs are switched.
+
+## Quick demo
+
+Try these:
+
+| A | B | Result |
+|---:|---:|---:|
+| 12 | 8 | 21 |
+| 9 | 6 | 16 |
+| 8 | 4 | 13 |
+| 10 | 3 | 20 |
+
+For example, with **8 and 4**:
+
+**8 ◇ 4 = 8 + 4 + 4 / 4 = 13**
+
+## What is this for?
+
+BalanceMath is mainly an experiment. It gives you a way to play with the operation, test patterns, and see what happens with different numbers.
+
+It is not being presented as proof that this operation is mathematically unique or that nobody has ever used an equivalent formula before.
