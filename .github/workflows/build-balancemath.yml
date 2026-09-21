@@ -1,4 +1,4 @@
-name: Build BalanceMath
+name: Build Test
 
 on:
   workflow_dispatch:
@@ -20,15 +20,15 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force build/classes | Out-Null
-          javac -d build/classes BalanceMath.java
-          jar --create --file build/BalanceMath.jar --main-class balancemath.BalanceMath -C build/classes .
+          javac -d build/classes Test.java
+          jar --create --file build/Test.jar --main-class test.Test -C build/classes .
       - name: Make the Windows app
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
-          jpackage --type exe --name BalanceMath --input build --main-jar BalanceMath.jar --main-class balancemath.BalanceMath --dest dist --win-shortcut --win-menu
+          jpackage --type exe --name Test --input build --main-jar Test.jar --main-class test.Test --dest dist --win-shortcut --win-menu
       - name: Save the EXE
         uses: actions/upload-artifact@v4
         with:
-          name: BalanceMath-Windows
-          path: dist/BalanceMath-*.exe
+          name: Test-Windows
+          path: dist/Test-*.exe
