@@ -6,52 +6,143 @@
 <title>BalanceMath</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f2f2f2;font-family:Arial,sans-serif;color:#111}
-.card{width:min(500px,92vw);background:white;border:1px solid #ddd;border-radius:14px;padding:28px;box-shadow:0 8px 25px rgba(0,0,0,.08)}
-h1{text-align:center;margin:0 0 24px;font-size:30px}
-.inputs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{font-weight:bold;display:block;margin-bottom:7px}
-input{width:100%;padding:12px;font-size:18px;border:1px solid #bbb;border-radius:8px}
-button{width:100%;margin-top:18px;padding:13px;font-size:17px;font-weight:bold;border:0;border-radius:8px;background:#111;color:white;cursor:pointer}
-button:hover{background:#333}
-#answer{text-align:center;font-size:34px;font-weight:bold;margin-top:25px;min-height:42px}
-.formula{text-align:center;margin-top:18px;color:#555;font-size:15px}
-.error{color:#b00020;font-size:16px}
+html,body{height:100%}
+body{
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eeeeee;
+  color:#111;
+  font-family:"Segoe UI",Arial,sans-serif;
+}
+.window{
+  width:min(500px,calc(100vw - 30px));
+  min-height:320px;
+  background:#f7f7f7;
+  border:1px solid #bdbdbd;
+  box-shadow:0 3px 12px rgba(0,0,0,.22);
+  padding:24px;
+}
+.title{
+  text-align:center;
+  font-size:28px;
+  font-weight:700;
+  margin:0 0 24px;
+}
+.inputs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+label{
+  display:block;
+  margin:0 0 6px;
+  font-size:14px;
+}
+input{
+  width:100%;
+  height:30px;
+  padding:4px 7px;
+  border:1px solid #999;
+  border-radius:2px;
+  background:white;
+  color:#111;
+  font:14px "Segoe UI",Arial,sans-serif;
+  outline:none;
+}
+input:focus{border-color:#555}
+button{
+  width:100%;
+  height:32px;
+  margin-top:16px;
+  border:1px solid #888;
+  border-radius:2px;
+  background:linear-gradient(#fff,#e4e4e4);
+  color:#111;
+  font:14px "Segoe UI",Arial,sans-serif;
+  cursor:pointer;
+}
+button:hover{background:linear-gradient(#fff,#dcdcdc)}
+button:active{background:#d8d8d8}
+#answer{
+  min-height:44px;
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  font-weight:700;
+}
+.formula{
+  text-align:center;
+  margin-top:12px;
+  color:#555;
+  font-size:13px;
+}
+.error{font-size:16px!important;color:#b00020}
 </style>
 </head>
 <body>
-<div class="card">
-<h1>BalanceMath</h1>
-<div class="inputs">
-<div><label for="a">A</label><input id="a" type="number" step="1" value="12"></div>
-<div><label for="b">B</label><input id="b" type="number" step="1" value="8"></div>
+<div class="window">
+  <div class="title">BalanceMath</div>
+
+  <div class="inputs">
+    <div>
+      <label for="a">A</label>
+      <input id="a" type="number" step="1" value="12">
+    </div>
+    <div>
+      <label for="b">B</label>
+      <input id="b" type="number" step="1" value="8">
+    </div>
+  </div>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div id="answer">21</div>
+  <div class="formula">A ◇ B = A + B + |A − B| ÷ gcd(A, B)</div>
 </div>
-<button onclick="calculate()">Calculate</button>
-<div id="answer">21</div>
-<div class="formula">A ◇ B = A + B + |A − B| ÷ gcd(A, B)</div>
-</div>
+
 <script>
 function gcd(a,b){
- a=Math.abs(a); b=Math.abs(b);
- while(b!==0){const t=a%b;a=b;b=t;}
- return a;
+  a=Math.abs(a); b=Math.abs(b);
+  while(b!==0){
+    const t=a%b;
+    a=b;
+    b=t;
+  }
+  return a;
 }
+
 function calculate(){
- const a=Number(document.getElementById('a').value);
- const b=Number(document.getElementById('b').value);
- const out=document.getElementById('answer');
- if(!Number.isInteger(a)||!Number.isInteger(b)){
-   out.textContent='Enter whole numbers';
-   out.className='error';
-   return;
- }
- out.className='';
- const g=gcd(a,b);
- if(g===0){out.textContent=String(a+b);return;}
- out.textContent=String(a+b+Math.abs(a-b)/g);
+  const a=Number(document.getElementById("a").value);
+  const b=Number(document.getElementById("b").value);
+  const out=document.getElementById("answer");
+
+  if(!Number.isInteger(a)||!Number.isInteger(b)){
+    out.textContent="Enter whole numbers";
+    out.className="error";
+    return;
+  }
+
+  out.className="";
+  const g=gcd(a,b);
+
+  if(g===0){
+    out.textContent=String(a+b);
+    return;
+  }
+
+  out.textContent=String(a+b+Math.abs(a-b)/g);
 }
-document.getElementById('a').addEventListener('keydown',e=>{if(e.key==='Enter')calculate()});
-document.getElementById('b').addEventListener('keydown',e=>{if(e.key==='Enter')calculate()});
+
+document.getElementById("a").addEventListener("keydown",e=>{
+  if(e.key==="Enter") calculate();
+});
+document.getElementById("b").addEventListener("keydown",e=>{
+  if(e.key==="Enter") calculate();
+});
 </script>
 </body>
 </html>
